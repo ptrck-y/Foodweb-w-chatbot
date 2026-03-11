@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Savor & Sage | Artisan Food Experience</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <meta name="description" content="Experience culinary artistry at its finest. Farm-to-table freshness meets innovative techniques at Savor & Sage, an artisan food experience established 2024.">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -22,6 +23,10 @@
             --text-light: #636e72;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             background: var(--cream);
@@ -29,7 +34,7 @@
             overflow-x: hidden;
         }
 
-        /* Navigation */
+        /* ===== NAVIGATION ===== */
         nav {
             position: fixed;
             top: 0;
@@ -42,6 +47,12 @@
             background: rgba(248, 243, 230, 0.95);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(212, 165, 116, 0.3);
+            transition: box-shadow 0.3s ease, padding 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 1rem 5%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
 
         .logo {
@@ -88,30 +99,100 @@
             transition: width 0.3s ease;
         }
 
-        .nav-links a:hover {
+        .nav-links a:hover,
+        .nav-links a.active {
             color: var(--accent);
         }
 
-        .nav-links a:hover::after {
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
             width: 100%;
         }
 
         .nav-cta {
             background: var(--primary);
-            color: white;
+            color: white !important;
             padding: 0.8rem 1.5rem;
             border-radius: 30px;
             text-decoration: none;
             font-weight: 500;
             transition: all 0.3s ease;
+            font-size: 0.9rem;
         }
 
         .nav-cta:hover {
-            background: var(--accent);
+            background: var(--accent) !important;
             transform: translateY(-2px);
         }
 
-        /* Hero Section */
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 4px;
+            background: none;
+            border: none;
+            z-index: 1100;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--primary);
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--cream);
+            z-index: 999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2.5rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-menu.open {
+            opacity: 1;
+        }
+
+        .mobile-menu a {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-menu a:hover { color: var(--accent); }
+
+        .mobile-menu .mobile-cta {
+            background: var(--accent);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        /* ===== HERO ===== */
         .hero {
             height: 100vh;
             display: flex;
@@ -182,6 +263,8 @@
             display: inline-flex;
             gap: 1rem;
             animation: fadeInUp 1s ease 0.6s both;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .btn-primary {
@@ -220,14 +303,8 @@
         }
 
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Floating Elements */
@@ -236,18 +313,53 @@
             font-size: 3rem;
             opacity: 0.1;
             animation: float 6s ease-in-out infinite;
+            pointer-events: none;
         }
 
-        .floating-food:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
-        .floating-food:nth-child(2) { top: 60%; right: 15%; animation-delay: 2s; }
-        .floating-food:nth-child(3) { bottom: 20%; left: 20%; animation-delay: 4s; }
+        .floating-food:nth-child(2) { top: 20%; left: 10%; animation-delay: 0s; }
+        .floating-food:nth-child(3) { top: 60%; right: 15%; animation-delay: 2s; }
+        .floating-food:nth-child(4) { bottom: 20%; left: 20%; animation-delay: 4s; }
 
         @keyframes float {
             0%, 100% { transform: translateY(0) rotate(0deg); }
             50% { transform: translateY(-20px) rotate(10deg); }
         }
 
-        /* Features Section */
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            animation: fadeInUp 1s ease 1.2s both;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .scroll-indicator::after {
+            content: '';
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--accent), transparent);
+            animation: scrollLine 1.5s ease-in-out infinite;
+        }
+
+        @keyframes scrollLine {
+            0% { transform: scaleY(0); transform-origin: top; }
+            50% { transform: scaleY(1); transform-origin: top; }
+            51% { transform: scaleY(1); transform-origin: bottom; }
+            100% { transform: scaleY(0); transform-origin: bottom; }
+        }
+
+        /* ===== FEATURES ===== */
         .features {
             padding: 8rem 5%;
             background: white;
@@ -309,9 +421,7 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
 
-        .feature-card:hover::before {
-            transform: scaleX(1);
-        }
+        .feature-card:hover::before { transform: scaleX(1); }
 
         .feature-icon {
             font-size: 3rem;
@@ -326,12 +436,9 @@
             color: var(--primary);
         }
 
-        .feature-desc {
-            color: var(--text-light);
-            line-height: 1.7;
-        }
+        .feature-desc { color: var(--text-light); line-height: 1.7; }
 
-        /* Menu Preview */
+        /* ===== MENU PREVIEW ===== */
         .menu-preview {
             padding: 8rem 5%;
             background: var(--primary);
@@ -340,13 +447,8 @@
             overflow: hidden;
         }
 
-        .menu-preview .section-tag {
-            color: var(--accent-light);
-        }
-
-        .menu-preview .section-title {
-            color: white;
-        }
+        .menu-preview .section-tag { color: var(--accent-light); }
+        .menu-preview .section-title { color: white; }
 
         .menu-grid {
             display: grid;
@@ -403,7 +505,294 @@
             font-size: 1.2rem;
         }
 
-        /* Testimonials */
+        .menu-cta-wrap {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .menu-cta-wrap .btn-primary {
+            display: inline-block;
+        }
+
+        /* ===== ABOUT ===== */
+        #about {
+            padding: 8rem 5%;
+            background: var(--cream);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .about-visual {
+            position: relative;
+        }
+
+        .about-badge {
+            width: 360px;
+            height: 360px;
+            background: linear-gradient(135deg, var(--gold), var(--accent));
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            animation: morphBlob 8s ease-in-out infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes morphBlob {
+            0%, 100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+            25% { border-radius: 50% 50% 30% 70% / 70% 30% 70% 30%; }
+            50% { border-radius: 70% 30% 50% 50% / 30% 70% 30% 70%; }
+            75% { border-radius: 30% 70% 30% 70% / 50% 50% 70% 30%; }
+        }
+
+        .about-stat {
+            position: absolute;
+            background: white;
+            border-radius: 15px;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .about-stat:nth-child(2) { top: 0; right: 0; }
+        .about-stat:nth-child(3) { bottom: 0; left: 0; }
+
+        .about-stat strong {
+            display: block;
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--accent);
+        }
+
+        .about-stat span { font-size: 0.85rem; color: var(--text-light); }
+
+        .about-text .section-tag { text-align: left; display: block; margin-bottom: 1rem; }
+        .about-text .section-title { text-align: left; margin-bottom: 1.5rem; }
+
+        .about-text p {
+            color: var(--text-light);
+            line-height: 1.9;
+            margin-bottom: 1.5rem;
+        }
+
+        /* ===== RESERVATIONS ===== */
+        #reservations {
+            padding: 8rem 5%;
+            background: white;
+        }
+
+        .reservation-container {
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        .reservation-form {
+            background: var(--cream);
+            border-radius: 25px;
+            padding: 3rem;
+            margin-top: 3rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.06);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 0.9rem 1.2rem;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            background: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.3s ease;
+            appearance: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--accent);
+        }
+
+        .form-group textarea { resize: vertical; min-height: 100px; }
+
+        .form-submit {
+            width: 100%;
+            padding: 1.1rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .form-submit:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .form-success {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .form-success .check {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-success h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-success p { color: var(--text-light); }
+
+        /* ===== CATERING ===== */
+        #catering {
+            padding: 8rem 5%;
+            background: var(--primary);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #catering .section-tag { color: var(--accent-light); }
+        #catering .section-title { color: white; }
+
+        .catering-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1100px;
+            margin: 4rem auto 0;
+        }
+
+        .catering-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .catering-card.featured {
+            background: rgba(225,112,85,0.15);
+            border-color: var(--accent);
+        }
+
+        .catering-tag {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        .catering-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255,255,255,0.1);
+        }
+
+        .catering-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+
+        .catering-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .catering-card p {
+            color: rgba(255,255,255,0.7);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .catering-card ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            margin-bottom: 2rem;
+        }
+
+        .catering-card ul li {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .catering-card ul li::before {
+            content: '✓';
+            color: var(--accent-light);
+            font-weight: 700;
+        }
+
+        .btn-outline-white {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            border: 2px solid rgba(255,255,255,0.4);
+            border-radius: 50px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-outline-white:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        /* ===== TESTIMONIALS ===== */
         .testimonials {
             padding: 8rem 5%;
             background: var(--cream);
@@ -423,6 +812,12 @@
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
         }
 
         .testimonial-card::before {
@@ -434,6 +829,15 @@
             position: absolute;
             top: 10px;
             left: 20px;
+            line-height: 1;
+        }
+
+        .stars {
+            color: var(--gold);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
         }
 
         .testimonial-text {
@@ -461,6 +865,7 @@
             justify-content: center;
             color: white;
             font-weight: 600;
+            flex-shrink: 0;
         }
 
         .author-info h4 {
@@ -468,12 +873,92 @@
             color: var(--primary);
         }
 
-        .author-info span {
-            color: var(--text-light);
-            font-size: 0.9rem;
+        .author-info span { color: var(--text-light); font-size: 0.9rem; }
+
+        /* ===== CONTACT ===== */
+        #contact {
+            padding: 8rem 5%;
+            background: white;
         }
 
-        /* Newsletter */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            max-width: 1100px;
+            margin: 4rem auto 0;
+            align-items: start;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .contact-icon {
+            width: 55px;
+            height: 55px;
+            background: var(--cream);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .contact-detail h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 0.3rem;
+        }
+
+        .contact-detail p,
+        .contact-detail a {
+            color: var(--text-light);
+            line-height: 1.7;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .contact-detail a:hover { color: var(--accent); }
+
+        .contact-form-simple {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .contact-form-simple input,
+        .contact-form-simple textarea {
+            padding: 0.9rem 1.2rem;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.3s ease;
+            background: white;
+        }
+
+        .contact-form-simple input:focus,
+        .contact-form-simple textarea:focus {
+            border-color: var(--accent);
+        }
+
+        .contact-form-simple textarea { resize: vertical; min-height: 120px; }
+
+        /* ===== NEWSLETTER ===== */
         .newsletter {
             padding: 6rem 5%;
             background: linear-gradient(135deg, var(--accent), #d63031);
@@ -487,10 +972,7 @@
             margin-bottom: 1rem;
         }
 
-        .newsletter p {
-            opacity: 0.9;
-            margin-bottom: 2rem;
-        }
+        .newsletter p { opacity: 0.9; margin-bottom: 2rem; }
 
         .newsletter-form {
             display: flex;
@@ -498,15 +980,18 @@
             justify-content: center;
             max-width: 500px;
             margin: 0 auto;
+            flex-wrap: wrap;
         }
 
         .newsletter-input {
             flex: 1;
+            min-width: 200px;
             padding: 1rem 1.5rem;
             border: none;
             border-radius: 50px;
             font-size: 1rem;
             outline: none;
+            font-family: 'Inter', sans-serif;
         }
 
         .newsletter-btn {
@@ -518,6 +1003,9 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            white-space: nowrap;
         }
 
         .newsletter-btn:hover {
@@ -526,7 +1014,17 @@
             transform: scale(1.05);
         }
 
-        /* Footer */
+        .newsletter-msg {
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            min-height: 1.4rem;
+        }
+
+        .newsletter-msg.visible { opacity: 1; }
+
+        /* ===== FOOTER ===== */
         footer {
             background: var(--primary);
             color: white;
@@ -553,10 +1051,7 @@
             margin-bottom: 1.5rem;
         }
 
-        .social-links {
-            display: flex;
-            gap: 1rem;
-        }
+        .social-links { display: flex; gap: 1rem; }
 
         .social-links a {
             width: 40px;
@@ -568,6 +1063,8 @@
             justify-content: center;
             color: white;
             text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 600;
             transition: all 0.3s ease;
         }
 
@@ -582,45 +1079,110 @@
             color: var(--accent-light);
         }
 
-        .footer-links ul {
-            list-style: none;
-        }
+        .footer-links ul { list-style: none; }
 
-        .footer-links li {
-            margin-bottom: 0.8rem;
-        }
+        .footer-links li { margin-bottom: 0.8rem; }
 
         .footer-links a {
             color: rgba(255,255,255,0.7);
             text-decoration: none;
             transition: color 0.3s ease;
+            font-size: 0.95rem;
         }
 
-        .footer-links a:hover {
-            color: var(--accent-light);
-        }
+        .footer-links a:hover { color: var(--accent-light); }
 
         .footer-bottom {
             text-align: center;
             padding-top: 2rem;
             border-top: 1px solid rgba(255,255,255,0.1);
             color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .hero-title { font-size: 3rem; }
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--primary);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* ===== SCROLL REVEAL ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .nav-links, .nav-cta { display: none; }
+            .hamburger { display: flex; }
+
+            .hero-title { font-size: 3.2rem; }
+            .section-title { font-size: 2.2rem; }
+
             .features-grid,
-            .testimonial-grid { grid-template-columns: 1fr; }
+            .testimonial-grid,
+            .catering-grid { grid-template-columns: 1fr; }
+
             .menu-grid { grid-template-columns: 1fr; }
+
+            #about {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                padding: 5rem 5%;
+            }
+
+            .about-badge { width: 260px; height: 260px; }
+
+            .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+
+            .form-row { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 560px) {
+            .hero-title { font-size: 2.4rem; }
             .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .reservation-form { padding: 2rem 1.5rem; }
         }
     </style>
 </head>
 <body>
 
-    <nav>
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span id="toast-icon">✓</span>
+        <span id="toast-msg">Done!</span>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
         <a href="#" class="logo">Savor & Sage</a>
         <ul class="nav-links">
             <li><a href="#menu">Menu</a></li>
@@ -629,43 +1191,60 @@
             <li><a href="#catering">Catering</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
-        <a href="#" class="nav-cta">Book a Table</a>
+        <a href="#reservations" class="nav-cta">Book a Table</a>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
     </nav>
 
-    <section class="hero">
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#menu" class="mobile-link">Menu</a>
+        <a href="#about" class="mobile-link">Our Story</a>
+        <a href="#reservations" class="mobile-link">Reservations</a>
+        <a href="#catering" class="mobile-link">Catering</a>
+        <a href="#contact" class="mobile-link">Contact</a>
+        <a href="#reservations" class="mobile-link mobile-cta">Book a Table</a>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero" id="home">
         <div class="hero-bg"></div>
         <div class="floating-food">🥗</div>
         <div class="floating-food">🍷</div>
         <div class="floating-food">🥘</div>
-        
         <div class="hero-content">
             <p class="hero-subtitle">Est. 2024</p>
             <h1 class="hero-title">Where Every Bite <br>Tells a <span>Story</span></h1>
             <p class="hero-desc">Experience culinary artistry at its finest. Farm-to-table freshness meets innovative techniques in an atmosphere of rustic elegance.</p>
             <div class="hero-cta">
-                <a href="#" class="btn-primary">Explore Menu</a>
-                <a href="#" class="btn-secondary">Our Story</a>
+                <a href="#menu" class="btn-primary">Explore Menu</a>
+                <a href="#about" class="btn-secondary">Our Story</a>
             </div>
+        </div>
+        <div class="scroll-indicator" onclick="document.querySelector('.features').scrollIntoView({behavior:'smooth'})">
+            Scroll
         </div>
     </section>
 
+    <!-- Features -->
     <section class="features">
-        <div class="section-header">
+        <div class="section-header reveal">
             <p class="section-tag">Why Choose Us</p>
             <h2 class="section-title">The Savor & Sage Experience</h2>
         </div>
         <div class="features-grid">
-            <div class="feature-card">
+            <div class="feature-card reveal">
                 <span class="feature-icon">🌿</span>
                 <h3 class="feature-title">Farm Fresh</h3>
                 <p class="feature-desc">Ingredients sourced daily from local organic farms within 50 miles of our kitchen. Seasonal menus that celebrate nature's bounty.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal" style="transition-delay:0.15s">
                 <span class="feature-icon">👨‍🍳</span>
                 <h3 class="feature-title">Master Chefs</h3>
                 <p class="feature-desc">Our culinary team brings decades of experience from Michelin-starred kitchens across Europe and Asia.</p>
             </div>
-            <div class="feature-card">
+            <div class="feature-card reveal" style="transition-delay:0.3s">
                 <span class="feature-icon">🍷</span>
                 <h3 class="feature-title">Curated Wines</h3>
                 <p class="feature-desc">Over 200 carefully selected labels from boutique vineyards worldwide, perfectly paired with every dish.</p>
@@ -673,13 +1252,14 @@
         </div>
     </section>
 
+    <!-- Menu Preview -->
     <section class="menu-preview" id="menu">
-        <div class="section-header">
+        <div class="section-header reveal">
             <p class="section-tag">Seasonal Selections</p>
             <h2 class="section-title">This Week's Highlights</h2>
         </div>
         <div class="menu-grid">
-            <div class="menu-item">
+            <div class="menu-item reveal">
                 <div class="menu-img">🥩</div>
                 <div class="menu-content">
                     <h3>Wagyu Beef Carpaccio</h3>
@@ -687,7 +1267,7 @@
                     <span class="menu-price">$34</span>
                 </div>
             </div>
-            <div class="menu-item">
+            <div class="menu-item reveal" style="transition-delay:0.1s">
                 <div class="menu-img">🦐</div>
                 <div class="menu-content">
                     <h3>Butter-Poached Lobster</h3>
@@ -695,7 +1275,7 @@
                     <span class="menu-price">$52</span>
                 </div>
             </div>
-            <div class="menu-item">
+            <div class="menu-item reveal" style="transition-delay:0.2s">
                 <div class="menu-img">🍄</div>
                 <div class="menu-content">
                     <h3>Wild Mushroom Risotto</h3>
@@ -703,7 +1283,7 @@
                     <span class="menu-price">$28</span>
                 </div>
             </div>
-            <div class="menu-item">
+            <div class="menu-item reveal" style="transition-delay:0.3s">
                 <div class="menu-img">🍰</div>
                 <div class="menu-content">
                     <h3>Dark Chocolate Soufflé</h3>
@@ -712,15 +1292,165 @@
                 </div>
             </div>
         </div>
+        <div class="menu-cta-wrap reveal">
+            <a href="#reservations" class="btn-primary">Reserve Your Table</a>
+        </div>
     </section>
 
+    <!-- About -->
+    <section id="about">
+        <div class="about-visual reveal">
+            <div class="about-badge">🌿</div>
+            <div class="about-stat">
+                <strong>50+</strong>
+                <span>Local Partners</span>
+            </div>
+            <div class="about-stat">
+                <strong>200+</strong>
+                <span>Wine Labels</span>
+            </div>
+        </div>
+        <div class="about-text">
+            <p class="section-tag reveal">Our Story</p>
+            <h2 class="section-title reveal">Passion Meets Plate</h2>
+            <p class="reveal">Savor & Sage was born from a simple belief: that exceptional food is a form of storytelling. Founded in 2024 by chef Elara Voss and sommelier Marco Soleil, we set out to create a dining experience that honors both tradition and innovation.</p>
+            <p class="reveal">Every dish on our menu tells a story — of the farmer who grew the herbs, the seasons that shaped the harvest, and the artisan techniques passed down through generations. We believe the best meals are ones that connect us to the earth, to each other, and to the moment.</p>
+            <a href="#reservations" class="btn-primary reveal" style="display:inline-block;margin-top:1rem;">Join Our Table</a>
+        </div>
+    </section>
+
+    <!-- Reservations -->
+    <section id="reservations">
+        <div class="reservation-container">
+            <div class="section-header reveal">
+                <p class="section-tag">Dine With Us</p>
+                <h2 class="section-title">Reserve Your Table</h2>
+                <p style="color:var(--text-light);margin-top:0.5rem;">We recommend booking at least 48 hours in advance.</p>
+            </div>
+            <div class="reservation-form reveal" id="resForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="res-name">Full Name</label>
+                        <input type="text" id="res-name" placeholder="Jane Smith" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="res-email">Email</label>
+                        <input type="email" id="res-email" placeholder="jane@email.com" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="res-phone">Phone</label>
+                        <input type="tel" id="res-phone" placeholder="+1 (555) 000-0000">
+                    </div>
+                    <div class="form-group">
+                        <label for="res-guests">Guests</label>
+                        <select id="res-guests">
+                            <option value="">Select guests</option>
+                            <option>1 Guest</option>
+                            <option>2 Guests</option>
+                            <option>3 Guests</option>
+                            <option>4 Guests</option>
+                            <option>5–6 Guests</option>
+                            <option>7–10 Guests</option>
+                            <option>Large Party (10+)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="res-date">Preferred Date</label>
+                        <input type="date" id="res-date">
+                    </div>
+                    <div class="form-group">
+                        <label for="res-time">Preferred Time</label>
+                        <select id="res-time">
+                            <option value="">Select time</option>
+                            <option>12:00 PM</option>
+                            <option>12:30 PM</option>
+                            <option>1:00 PM</option>
+                            <option>1:30 PM</option>
+                            <option>6:00 PM</option>
+                            <option>6:30 PM</option>
+                            <option>7:00 PM</option>
+                            <option>7:30 PM</option>
+                            <option>8:00 PM</option>
+                            <option>8:30 PM</option>
+                            <option>9:00 PM</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="res-notes">Special Requests</label>
+                    <textarea id="res-notes" placeholder="Dietary restrictions, allergies, special occasions…"></textarea>
+                </div>
+                <button class="form-submit" id="resSubmit" onclick="submitReservation()">Request Reservation</button>
+            </div>
+            <div class="form-success" id="resSuccess">
+                <div class="check">🎉</div>
+                <h3>Reservation Received!</h3>
+                <p>Thank you! We'll confirm your table by email within 2 hours. We look forward to welcoming you.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Catering -->
+    <section id="catering">
+        <div class="section-header reveal">
+            <p class="section-tag">Private Events</p>
+            <h2 class="section-title">Catering & Private Dining</h2>
+            <p style="color:rgba(255,255,255,0.7);max-width:500px;margin:0 auto;margin-top:0.5rem;">From intimate dinner parties to grand corporate galas, we bring the Savor & Sage experience to you.</p>
+        </div>
+        <div class="catering-grid">
+            <div class="catering-card reveal">
+                <div class="catering-icon">🏠</div>
+                <h3>Private Dining Room</h3>
+                <p>Exclusively yours for the evening. Perfect for intimate celebrations and business dinners.</p>
+                <ul>
+                    <li>Up to 20 guests</li>
+                    <li>Custom tasting menu</li>
+                    <li>Dedicated sommelier</li>
+                    <li>Floral arrangements included</li>
+                </ul>
+                <button class="btn-outline-white" onclick="scrollToContact()">Enquire Now</button>
+            </div>
+            <div class="catering-card featured reveal" style="transition-delay:0.15s">
+                <span class="catering-tag">Most Popular</span>
+                <div class="catering-icon">🥂</div>
+                <h3>Corporate Events</h3>
+                <p>Impress clients and celebrate milestones with our full-service catering experience.</p>
+                <ul>
+                    <li>20–150 guests</li>
+                    <li>Custom branding options</li>
+                    <li>Audio/visual support</li>
+                    <li>Full wait staff included</li>
+                </ul>
+                <button class="btn-outline-white" onclick="scrollToContact()">Enquire Now</button>
+            </div>
+            <div class="catering-card reveal" style="transition-delay:0.3s">
+                <div class="catering-icon">🎊</div>
+                <h3>Social Celebrations</h3>
+                <p>Weddings, birthdays, anniversaries — every celebration deserves a culinary masterpiece.</p>
+                <ul>
+                    <li>Up to 300 guests</li>
+                    <li>Bespoke menu design</li>
+                    <li>On-site or off-site</li>
+                    <li>Full décor coordination</li>
+                </ul>
+                <button class="btn-outline-white" onclick="scrollToContact()">Enquire Now</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
     <section class="testimonials">
-        <div class="section-header">
+        <div class="section-header reveal">
             <p class="section-tag">Guest Experiences</p>
             <h2 class="section-title">What People Say</h2>
         </div>
         <div class="testimonial-grid">
-            <div class="testimonial-card">
+            <div class="testimonial-card reveal">
+                <div class="stars">★★★★★</div>
                 <p class="testimonial-text">An absolutely transcendent dining experience. The tasting menu was a journey through flavors I never knew existed. The sommelier's pairings were perfection.</p>
                 <div class="testimonial-author">
                     <div class="author-avatar">JD</div>
@@ -730,8 +1460,9 @@
                     </div>
                 </div>
             </div>
-            <div class="testimonial-card">
-                <p class="testimonial-text">We celebrated our anniversary here and it couldn't have been more perfect. The attention to detail in every course, the ambiance—pure magic.</p>
+            <div class="testimonial-card reveal" style="transition-delay:0.15s">
+                <div class="stars">★★★★★</div>
+                <p class="testimonial-text">We celebrated our anniversary here and it couldn't have been more perfect. The attention to detail in every course, the ambiance — pure magic.</p>
                 <div class="testimonial-author">
                     <div class="author-avatar">SM</div>
                     <div class="author-info">
@@ -740,7 +1471,8 @@
                     </div>
                 </div>
             </div>
-            <div class="testimonial-card">
+            <div class="testimonial-card reveal" style="transition-delay:0.3s">
+                <div class="stars">★★★★★</div>
                 <p class="testimonial-text">Finally, a restaurant that understands that dining is theater. From the amuse-bouche to the petit fours, every moment was choreographed delight.</p>
                 <div class="testimonial-author">
                     <div class="author-avatar">AC</div>
@@ -753,62 +1485,263 @@
         </div>
     </section>
 
+    <!-- Newsletter -->
     <section class="newsletter">
-        <h2>Join Our Culinary Journey</h2>
-        <p>Subscribe for exclusive tasting events, seasonal menus, and chef's secrets.</p>
-        <form class="newsletter-form">
-            <input type="email" class="newsletter-input" placeholder="Enter your email">
-            <button type="submit" class="newsletter-btn">Subscribe</button>
-        </form>
+        <h2 class="reveal">Join Our Culinary Journey</h2>
+        <p class="reveal">Subscribe for exclusive tasting events, seasonal menus, and chef's secrets.</p>
+        <div class="newsletter-form reveal">
+            <input type="email" class="newsletter-input" id="nlEmail" placeholder="Enter your email">
+            <button class="newsletter-btn" onclick="subscribeNewsletter()">Subscribe</button>
+        </div>
+        <p class="newsletter-msg" id="nlMsg">🎉 Welcome to the Savor & Sage family!</p>
     </section>
 
+    <!-- Contact -->
+    <section id="contact">
+        <div class="section-header reveal">
+            <p class="section-tag">Find Us</p>
+            <h2 class="section-title">Get in Touch</h2>
+        </div>
+        <div class="contact-grid">
+            <div class="contact-info">
+                <div class="contact-item reveal">
+                    <div class="contact-icon">📍</div>
+                    <div class="contact-detail">
+                        <h4>Address</h4>
+                        <p>142 Orchard Lane, West Village<br>New York, NY 10014</p>
+                    </div>
+                </div>
+                <div class="contact-item reveal">
+                    <div class="contact-icon">🕐</div>
+                    <div class="contact-detail">
+                        <h4>Hours</h4>
+                        <p>Mon–Thu: 12pm – 10pm<br>Fri–Sat: 12pm – 11pm<br>Sunday: 11am – 9pm</p>
+                    </div>
+                </div>
+                <div class="contact-item reveal">
+                    <div class="contact-icon">📞</div>
+                    <div class="contact-detail">
+                        <h4>Phone</h4>
+                        <a href="tel:+12125550183">+1 (212) 555-0183</a>
+                    </div>
+                </div>
+                <div class="contact-item reveal">
+                    <div class="contact-icon">✉️</div>
+                    <div class="contact-detail">
+                        <h4>Email</h4>
+                        <a href="mailto:hello@savorandsage.com">hello@savorandsage.com</a>
+                    </div>
+                </div>
+            </div>
+            <div class="contact-form-simple reveal">
+                <input type="text" id="ct-name" placeholder="Your name">
+                <input type="email" id="ct-email" placeholder="Your email">
+                <textarea id="ct-msg" placeholder="Your message…"></textarea>
+                <button class="form-submit" onclick="submitContact()">Send Message</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
     <footer>
         <div class="footer-grid">
             <div class="footer-brand">
                 <h3>Savor & Sage</h3>
                 <p>Crafting unforgettable dining experiences since 2024. Where passion meets plate.</p>
                 <div class="social-links">
-                    <a href="#">IG</a>
-                    <a href="#">FB</a>
-                    <a href="#">TW</a>
+                    <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
+                    <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook">FB</a>
+                    <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter">TW</a>
                 </div>
             </div>
             <div class="footer-links">
                 <h4>Explore</h4>
                 <ul>
-                    <li><a href="#">Menu</a></li>
-                    <li><a href="#">Wine List</a></li>
-                    <li><a href="#">Private Dining</a></li>
-                    <li><a href="#">Gift Cards</a></li>
+                    <li><a href="#menu">Menu</a></li>
+                    <li><a href="#menu">Wine List</a></li>
+                    <li><a href="#catering">Private Dining</a></li>
+                    <li><a href="#contact">Gift Cards</a></li>
                 </ul>
             </div>
             <div class="footer-links">
                 <h4>Visit</h4>
                 <ul>
-                    <li><a href="#">Reservations</a></li>
-                    <li><a href="#">Hours</a></li>
-                    <li><a href="#">Location</a></li>
-                    <li><a href="#">Parking</a></li>
+                    <li><a href="#reservations">Reservations</a></li>
+                    <li><a href="#contact">Hours</a></li>
+                    <li><a href="#contact">Location</a></li>
+                    <li><a href="#contact">Parking</a></li>
                 </ul>
             </div>
             <div class="footer-links">
-                <h4>Contact</h4>
+                <h4>Connect</h4>
                 <ul>
-                    <li><a href="#">Press</a></li>
-                    <li><a href="#">Careers</a></li>
-                    <li><a href="#">Events</a></li>
-                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="mailto:press@savorandsage.com">Press</a></li>
+                    <li><a href="mailto:careers@savorandsage.com">Careers</a></li>
+                    <li><a href="#catering">Private Events</a></li>
+                    <li><a href="#contact">Contact Us</a></li>
                 </ul>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 Savor & Sage. All rights reserved. Designed with passion.</p>
+            <p>&copy; <span id="year"></span> Savor & Sage. All rights reserved. Crafted with passion.</p>
         </div>
     </footer>
 
-    <invent-assistant
-        assistant-id="ast_27iERLUGe5CF7bCLZSpqpT"
-    />
+    <script>
+        // ── Dynamic year ──────────────────────────────────────────────
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // ── Set min date for reservation calendar ────────────────────
+        const dateInput = document.getElementById('res-date');
+        if (dateInput) {
+            const today = new Date();
+            today.setDate(today.getDate() + 1);
+            dateInput.min = today.toISOString().split('T')[0];
+        }
+
+        // ── Navbar scroll behavior ────────────────────────────────────
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+            updateActiveNav();
+        });
+
+        // ── Active nav link on scroll ────────────────────────────────
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        function updateActiveNav() {
+            let current = '';
+            sections.forEach(section => {
+                if (window.scrollY >= section.offsetTop - 120) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // ── Mobile menu ───────────────────────────────────────────────
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        function toggleMenu(open) {
+            hamburger.classList.toggle('open', open);
+            mobileMenu.style.display = open ? 'flex' : 'none';
+            setTimeout(() => mobileMenu.classList.toggle('open', open), 10);
+            document.body.style.overflow = open ? 'hidden' : '';
+        }
+
+        hamburger.addEventListener('click', () => {
+            const isOpen = hamburger.classList.contains('open');
+            toggleMenu(!isOpen);
+        });
+
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => toggleMenu(false));
+        });
+
+        // ── Scroll reveal ─────────────────────────────────────────────
+        const revealEls = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        revealEls.forEach(el => revealObserver.observe(el));
+
+        // ── Toast ─────────────────────────────────────────────────────
+        function showToast(msg, icon = '✓') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = msg;
+            document.getElementById('toast-icon').textContent = icon;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3500);
+        }
+
+        // ── Reservation form ──────────────────────────────────────────
+        function submitReservation() {
+            const name = document.getElementById('res-name').value.trim();
+            const email = document.getElementById('res-email').value.trim();
+            const guests = document.getElementById('res-guests').value;
+            const date = document.getElementById('res-date').value;
+            const time = document.getElementById('res-time').value;
+
+            if (!name || !email || !guests || !date || !time) {
+                showToast('Please fill in all required fields.', '⚠️');
+                return;
+            }
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showToast('Please enter a valid email address.', '⚠️');
+                return;
+            }
+
+            document.getElementById('resForm').style.display = 'none';
+            document.getElementById('resSuccess').style.display = 'block';
+            showToast('Reservation request sent!', '🎉');
+        }
+
+        // ── Contact form ──────────────────────────────────────────────
+        function submitContact() {
+            const name = document.getElementById('ct-name').value.trim();
+            const email = document.getElementById('ct-email').value.trim();
+            const msg = document.getElementById('ct-msg').value.trim();
+
+            if (!name || !email || !msg) {
+                showToast('Please fill in all fields.', '⚠️');
+                return;
+            }
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showToast('Please enter a valid email.', '⚠️');
+                return;
+            }
+
+            document.getElementById('ct-name').value = '';
+            document.getElementById('ct-email').value = '';
+            document.getElementById('ct-msg').value = '';
+            showToast('Message sent! We\'ll be in touch soon.', '✉️');
+        }
+
+        // ── Newsletter ────────────────────────────────────────────────
+        function subscribeNewsletter() {
+            const email = document.getElementById('nlEmail').value.trim();
+            const msg = document.getElementById('nlMsg');
+
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                msg.textContent = '⚠️ Please enter a valid email address.';
+                msg.classList.add('visible');
+                return;
+            }
+
+            document.getElementById('nlEmail').value = '';
+            msg.textContent = '🎉 Welcome to the Savor & Sage family!';
+            msg.classList.add('visible');
+            showToast('Subscribed successfully!', '🎉');
+        }
+
+        // ── Enter key support for newsletter ─────────────────────────
+        document.getElementById('nlEmail').addEventListener('keydown', e => {
+            if (e.key === 'Enter') subscribeNewsletter();
+        });
+
+        // ── Scroll to contact helper ──────────────────────────────────
+        function scrollToContact() {
+            document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+
+    <!-- Chatbot -->
+    <invent-assistant assistant-id="ast_27iERLUGe5CF7bCLZSpqpT"></invent-assistant>
     <script type="text/javascript" src="https://www.useinvent.com/button.js" async defer></script>
 
 </body>
